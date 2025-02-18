@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>情人节快乐！</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Microsoft YaHei', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            flex-direction: column;
+        }
+
+        .greeting {
+            position: absolute;
+            color: #ff0066;
+            font-size: 5vw;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+            opacity: 0;
+            transition: opacity 1s ease-out;
+            white-space: nowrap;
+            text-align: center;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        h1 {
+            font-size: 6vw;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+            transition: opacity 1s ease-out;
+            position: absolute;
+            z-index: 1;
+        }
+
+        .message-container {
+            position: absolute;
+            max-width: 80%;
+            max-height: 65vh;  /* 调大容器高度 */
+            overflow-y: auto;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1s ease;
+            z-index: 1;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 20px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            /* 隐藏滚动条 */
+            scrollbar-width: none; /* Firefox */
+        }
+
+        /* 隐藏滚动条（Webkit浏览器） */
+        .message-container::-webkit-scrollbar {
+            display: none;
+            width: 0;
+            background: transparent;
+        }
+
+        .message {
+            color: #ff0066;
+            font-size: 3.5vw; /* 调大字号 */
+            margin: 1em 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease;
+            pointer-events: none;
+            line-height: 1.6;
+            word-break: break-word;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .message {
+                font-size: 5vw; /* 移动端字号调大 */
+            }
+            .message-container {
+                max-width: 90%;
+                max-height: 70vh;
+            }
+        }
+    </style>
+</head>
+<body onclick="showRandomMessage(event)">
+    <h1 id="mainTitle">❤️ 乖乖 情人节快乐！❤️</h1>
+    <div class="message-container" id="messageContainer"></div>
+
+    <script>
+        // 初始标题显示
+        setTimeout(() => {
+            document.getElementById('mainTitle').style.opacity = '0';
+            startMessages();
+        }, 6000);
+
+        const article = [
+            "乖乖",
+            "这是我们相识后的第一个国际情人节呦",
+            "哈哈哈哈哈哈哈哈哈哈哈哈",
+            "从年前国考到现在",
+            "总感觉一直都很忙",
+            "但是又好像没做什么",
+            "我想有些事不去做",
+            "可能就再也想不到去做了",
+            "今天乖乖参加婚宴",
+            "我就老老实实的",
+            "写篇小作文",
+            "请徐老师耐心看一下",
+            "--------------------",
+            "不知不觉",
+            "乖乖陪我度过了三百多个日日夜夜",
+            "五一那晚见你时的情景",
+            "还历历在目",
+            "如今",
+            "我们双方父母都已经见过了面",
+            "不久的将来",
+            "我们也会像杨雅儒他们一样",
+            "办我们自己的婚宴",
+            "乖乖 真的真的很感谢你",
+            "我的生活因为有你而精彩",
+            "请一定一定要和我走下去",
+            "好喜欢乖乖呀",
+            "--------------------",
+            "大概是从去年假期过后",
+            "我感觉精力被很多事情分散",
+            "幸好有乖乖的耐心和理解",
+            "我们才能走到今天",
+            "这三百多天",
+            "我们创造了很多美好回忆",
+            "水韵天街 雅间饮茶",
+            "东湖水库 沐风漫步",
+            "酸辣丝汤 就怪味饼",
+            "南长街上 炫生煎 咬DQ",
+            "灵山大佛 抱佛脚 许心愿",
+            "惠山顶上歇过脚 秦淮河畔晒太阳",
+            "...",
+            "凡此种种 不一而足",
+            "很幸运有乖乖相伴",
+            "时至今日",
+            "每一次回想这些过往",
+            "都充满感动和甜蜜",
+            "未来 我们也会越来越精彩",
+            "--------------------",
+            "乖乖 好久没写东西了",
+            "有好多话",
+            "好多好多",
+            "等我慢慢讲给乖乖",
+            "愿我们携手走过每一个春夏秋冬",
+            "爱你，现在直到永远..."
+        ];
+
+        const messages = [
+            "爱你如初~",
+            "希望乖乖的生活永远充满爱与快乐~",
+            "我们一定会永远在一起~",
+            "走~跟我领证~",
+            "无论何时何地，爱永远与你同在~",
+            "爱你每一天~",
+            "希望乖乖的笑容比任何时候都灿烂~",
+            "愿爱与温暖永远环绕在你身边~"
+        ];
+
+        function startMessages() {
+            const container = document.getElementById('messageContainer');
+            container.style.opacity = '1';
+            
+            const autoScroll = () => {
+                container.scrollTo({
+                    top: container.scrollHeight,
+                    behavior: 'smooth'
+                });
+            };
+
+            article.forEach((text, index) => {
+                setTimeout(() => {
+                    const msg = document.createElement('div');
+                    msg.className = 'message';
+                    msg.textContent = text;
+                    container.appendChild(msg);
+                    
+                    autoScroll();
+                    
+                    setTimeout(() => {
+                        msg.style.opacity = '1';
+                        msg.style.transform = 'translateY(0)';
+                        autoScroll();
+                    }, 50);
+                }, index * 2500);
+            });
+        }
+
+        function showRandomMessage(event) {
+            // 保持原有点击功能不变
+            const randomIndex = Math.floor(Math.random() * messages.length);
+            const greeting = document.createElement('div');
+            greeting.textContent = messages[randomIndex];
+            greeting.classList.add('greeting');
+            document.body.appendChild(greeting);
+
+            const x = event.clientX;
+            const y = event.clientY;
+            
+            const maxX = window.innerWidth - greeting.offsetWidth;
+            const maxY = window.innerHeight - greeting.offsetHeight;
+
+            greeting.style.left = `${Math.min(x, maxX)}px`;
+            greeting.style.top = `${Math.min(y, maxY)}px`;
+
+            setTimeout(() => greeting.style.opacity = 1, 50);
+            setTimeout(() => {
+                greeting.style.opacity = 0;
+                setTimeout(() => greeting.remove(), 1000);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
